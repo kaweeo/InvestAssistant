@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # MY_APPS
+    'InvestAssistant.investments',
+    'InvestAssistant.transactions',
+    'InvestAssistant.common'
+    'InvestAssistant.accounts',
 ]
 
 MIDDLEWARE = [
