@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils.timezone import now
 
 from InvestAssistant.accounts.managers import AppUserManager
+from InvestAssistant.accounts.validators import CustomEmailValidator
 
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
@@ -16,6 +17,9 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(
         unique=True,
+        validators=[
+            CustomEmailValidator(),
+        ]
     )
 
     is_active = models.BooleanField(

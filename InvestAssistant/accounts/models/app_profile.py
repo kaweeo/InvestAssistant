@@ -1,7 +1,7 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
-
 from InvestAssistant.accounts.models.app_user import AppUser
+from InvestAssistant.accounts.validators import NameValidator, BasicPhoneNumberValidator
 
 
 class Profile(models.Model):
@@ -20,7 +20,7 @@ class Profile(models.Model):
         max_length=MAX_NAME_LENGTH,
         validators=(
             MinLengthValidator(MIN_NAME_LENGTH),
-            # custom_validator, # TODO
+            NameValidator,
         ),
         null=True,
         blank=True,
@@ -30,7 +30,7 @@ class Profile(models.Model):
         max_length=MAX_NAME_LENGTH,
         validators=(
             MinLengthValidator(MIN_NAME_LENGTH),
-            # custom_validator, # TODO
+            NameValidator,
         ),
         null=True,
         blank=True,
@@ -39,7 +39,7 @@ class Profile(models.Model):
     phone_number = models.CharField(
         max_length=MAX_PHONE_LENGTH,
         validators=(
-            # custom_validator_phone, # TODO
+            BasicPhoneNumberValidator,
         ),
         null=True,
         blank=True,
@@ -51,3 +51,6 @@ class Profile(models.Model):
             return f'{self.first_name} {self.last_name}'
 
         return 'Anonymous'
+
+    def __str__(self):
+        return f'{self.full_name} ({self.user.email})'
