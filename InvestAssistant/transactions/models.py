@@ -17,28 +17,39 @@ class Transaction(models.Model):
     profile = models.ForeignKey(
         to=Profile,
         on_delete=models.CASCADE,
-        related_name='transactions'
+        related_name='transactions',
+        blank=False,
+        null=False,
     )
 
     instrument = models.ForeignKey(
         to=Instrument,
         on_delete=models.CASCADE,
-        related_name='transactions'
+        related_name='transactions',
+        blank=False,
+        null=False,
     )
 
     transaction_side = models.CharField(
         max_length=4,
-        choices=TRANSACTION_SIDE_CHOICES
+        choices=TRANSACTION_SIDE_CHOICES,
+        blank=False,
+        null=False,
     )
 
     quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
+        max_digits=14,
+        decimal_places=4,
+        blank=False,
+        null=False,
     )
 
     price_per_unit = models.DecimalField(
-        max_digits=10,
-        decimal_places=4
+        max_digits=14,
+        decimal_places=4,
+        blank=False,
+        null=False,
+        default=0.0,
     )
 
     timestamp = models.DateTimeField(

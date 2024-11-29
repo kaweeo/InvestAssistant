@@ -18,13 +18,13 @@ class Investment(models.Model):
     )
 
     total_quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
+        max_digits=16,
+        decimal_places=6
     )
 
     avg_price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
+        max_digits=14,
+        decimal_places=4,
     )
 
     def calculate_cost_basis(self):
@@ -36,7 +36,7 @@ class Investment(models.Model):
     def calculate_unrealized_pnl(self):
         return round(self.calculate_market_value() - self.calculate_cost_basis(), 2)
 
-    def calculate_current_ROI(self):
+    def calculate_current_roi(self):
         if self.calculate_cost_basis() == 0:
             return Decimal(0)
         return round((self.calculate_unrealized_pnl() / self.calculate_cost_basis()) * 100, 2)

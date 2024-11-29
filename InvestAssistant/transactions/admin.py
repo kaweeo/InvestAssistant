@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from InvestAssistant.transactions.models import Transaction
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('timestamp', 'instrument', 'transaction_side',
+                    'quantity', 'price_per_unit', 'profile' )

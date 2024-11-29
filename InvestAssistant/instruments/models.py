@@ -22,13 +22,16 @@ class Instrument(models.Model):
     ticker = models.CharField(
         max_length=10,
         unique=True,
-        help_text="The unique ticker symbol of the instrument."
+        help_text="The unique ticker symbol of the instrument.",
+        blank=True,
+        null=True,
     )
 
     current_price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        help_text="The current market price per unit of the instrument."
+        max_digits=14,
+        decimal_places=4,
+        help_text="The current market price per unit of the instrument.",
+        default=0.0,
     )
 
     type = models.CharField(
