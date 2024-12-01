@@ -1,0 +1,36 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Dashboard - InvestAssistant{% endblock %}
+
+{% block content %}
+    <div class="text-center py-10 bg-green-50">
+        <h1 class="text-4xl font-bold text-green-800">Welcome to InvestAssistant</h1>
+        <p class="text-lg text-green-600 mt-4">Manage your investments, portfolio, and transactions all in one place.</p>
+    </div>
+
+    <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-10">
+        <div class="bg-green-700 text-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-2xl font-semibold">Instruments</h3>
+            <p class="mt-2">Track all available financial instruments.</p>
+            <a href="#" class="bg-green-500 hover:bg-green-600 text-white mt-4 px-4 py-2 inline-block rounded">View Instruments</a>
+        </div>
+
+        <div class="bg-green-700 text-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-2xl font-semibold">Portfolio</h3>
+            <p class="mt-2">Monitor your portfolio and asset allocation.</p>
+            <a href="#" class="bg-green-500 hover:bg-green-600 text-white mt-4 px-4 py-2 inline-block rounded">View Portfolio</a>
+        </div>
+
+        <div class="bg-green-700 text-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-2xl font-semibold">Transactions</h3>
+            <p class="mt-2">Review your recent buy and sell transactions.</p>
+            <a href="#" class="bg-green-500 hover:bg-green-600 text-white mt-4 px-4 py-2 inline-block rounded">View Transactions</a>
+        </div>
+
+        <div class="bg-green-700 text-white rounded-lg shadow-md p-6 text-center">
+            <h3 class="text-2xl font-semibold">Profile</h3>
+            <p class="mt-2">Update your profile and account settings.</p>
+            <a href="#" class="bg-green-500 hover:bg-green-600 text-white mt-4 px-4 py-2 inline-block rounded">View Profile</a>
+        </div>
+    </div>
+{% endblock %}

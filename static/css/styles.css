@@ -1,0 +1,138 @@
+/* Navbar Container */
+.navbar {
+    background-color: #1A1A1D;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #333;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Logo */
+.navbar-logo img {
+    height: 40px;
+}
+
+/* Navbar Links */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.navbar-links li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.navbar-links li a img {
+    height: 30px;
+    margin-bottom: 0.5rem;
+}
+
+.navbar-links li a span {
+    font-size: 0.9rem;
+}
+
+/* Hover Effect */
+.navbar-links li a:hover {
+    color: #f0a500;
+}
+
+/* Logout Button */
+.navbar-logout a {
+    color: white;
+    background-color: #f03e3e;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-logout a img {
+    height: 20px;
+}
+
+.navbar-logout a:hover {
+    background-color: #d32f2f;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .navbar-links {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Dashboard Section */
+.dashboard {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.dashboard h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Widget Cards */
+.widget {
+    background-color: #1A1A1D;
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    text-align: left;
+}
+
+.widget h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.widget p {
+    margin-bottom: 15px;
+}
+
+.widget a.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #f0a500;
+    color: #1A1A1D;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.widget a.btn:hover {
+    background-color: #d48800;
+}

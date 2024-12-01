@@ -1,0 +1,22 @@
+{% extends "partials/base.html" %}
+
+{% block title %}Instruments{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Available Instruments</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for instrument in instruments %}
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">{{ instrument.name }}</h2>
+            <p class="text-gray-700">Ticker: {{ instrument.ticker }}</p>
+            <p class="text-gray-700">Current Price: {{ instrument.price }} USD</p>
+            <a href="#" class="mt-4 inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                View Details
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <h1>Welcome to InvestAssistant</h1>
+
+    <div class="dashboard-widgets">
+        <div class="widget">
+            <h2>Instruments</h2>
+            <p>Track all available financial instruments.</p>
+            <a href="#" class="btn">View Instruments</a>
+        </div>
+
+        <div class="widget">
+            <h2>Portfolio</h2>
+            <p>Monitor your portfolio and asset allocation.</p>
+            <a href="#" class="btn">View Portfolio</a>
+        </div>
+
+        <div class="widget">
+            <h2>Transactions</h2>
+            <p>Review your recent buy and sell transactions.</p>
+            <a href="#" class="btn">View Transactions</a>
+        </div>
+
+        <div class="widget">
+            <h2>Profile</h2>
+            <p>Update your profile and account settings.</p>
+            <a href="#" class="btn">View Profile</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

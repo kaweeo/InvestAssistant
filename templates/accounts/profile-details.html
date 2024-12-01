@@ -1,0 +1,28 @@
+{% extends 'partials/base.html' %}
+{% block title %}Account Details{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10">
+    <h1 class="text-3xl font-bold text-center text-gray-800">Account Details</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 mt-6">
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div>
+                <dt class="font-medium text-gray-600">Full Name</dt>
+                <dd class="text-lg text-gray-800">{{ user.profile.full_name }}</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-gray-600">Email Address</dt>
+                <dd class="text-lg text-gray-800">{{ user.email }}</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-gray-600">Account Balance</dt>
+                <dd class="text-lg text-gray-800">{{ user.profile.balance }}</dd>
+            </div>
+        </dl>
+        <div class="mt-6 flex justify-between">
+            <a href="{% url 'profile_edit' %}" class="text-blue-600 hover:underline">Edit Profile</a>
+            <a href="{% url 'profile_delete' %}" class="text-red-600 hover:underline">Delete Account</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
