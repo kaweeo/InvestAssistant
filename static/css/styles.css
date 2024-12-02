@@ -136,3 +136,9 @@
 .widget a.btn:hover {
     background-color: #d48800;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
