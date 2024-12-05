@@ -3,7 +3,8 @@ from InvestAssistant.instruments import views
 
 urlpatterns = [
     path('', views.InstrumentListView.as_view(), name='instruments'),
-    # path('/isnturments/', include([
-    #     path('all/', )
-    # ])),
+    path('create/', views.CreateInstrumentView.as_view(), name='create-instrument'),
+    path('details/<int:pk>/', views.InstrumentDetailView.as_view(), name='details-instrument'),
+    path('edit/<int:pk>/', views.InstrumentEditView.as_view(), name='edit-instrument'),
+    path('delete/<int:pk>/', views.InstrumentDeleteView.as_view(), name='delete-instrument'),
 ]

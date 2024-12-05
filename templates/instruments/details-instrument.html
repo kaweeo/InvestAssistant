@@ -1,10 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'partials/base.html' %}
+{%  load static %}
+{% block title %}{{ instrument.name }} Details{% endblock %}
+
+
+{% block content %}
+    
+<div class="container mx-auto mt-10 px-4">
+   <div class="max-w-2xl mx-auto bg-[#f7fee7] rounded-lg shadow-lg overflow-hidden">
+       
+       <div class="p-8">
+           <h1 class="text-3xl font-bold text-green-700 mb-2 text-center">{{ instrument.name }}</h1>
+           
+           <div class="grid grid-cols-2 gap-4 mt-6">
+               <div class="bg-gray-50 p-4 rounded">
+                   <p class="text-sm text-gray-500">Ticker</p>
+                   <p class="text-lg font-semibold">{{ instrument.ticker|default:"N/A" }}</p>
+               </div>
+               
+               <div class="bg-gray-50 p-4 rounded">
+                   <p class="text-sm text-gray-500">Type</p>
+                   <p class="text-lg font-semibold">{{ instrument.get_type_display }}</p>
+               </div>
+               
+               <div class="bg-gray-50 p-4 rounded col-span-2">
+                   <p class="text-sm text-gray-500">Current Price</p>
+                   <p class="text-lg font-semibold">€{{ instrument.current_price|floatformat:2 }}</p>
+               </div>
+           </div>
+
+           <div class="mt-8 flex gap-4 justify-center">
+               <a href="{% url 'edit-instrument' pk=instrument.pk %}" 
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                   Edit
+               </a>
+               <a href="{% url 'delete-instrument' pk=instrument.pk %}" 
+                  class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                   Delete
+               </a>
+               <a href="{% url 'instruments' %}" 
+                  class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                   Back to Instruments
+               </a>
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock %}
+    

@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +42,9 @@ INSTALLED_APPS = [
     'InvestAssistant.transactions',
     'InvestAssistant.common',
     'InvestAssistant.accounts',
+    # 3rd party
+    # "unfold",
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
