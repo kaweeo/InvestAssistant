@@ -16,23 +16,23 @@
 
             <!-- Search and Add Section -->
             <div class="max-w-3xl mx-auto flex flex-col sm:flex-row gap-4 items-center justify-center">
-                <div class="relative flex-grow">
-                    <input type="text"
-                           placeholder="Search instruments..."
+                <form method="GET" action="{% url 'home' %}" class="flex gap-4 w-full">
+                    <div class="relative flex-grow">
+                        <input type="text" 
+                           name="q" 
+                           placeholder="Search instruments..." 
+                           value="{{ query }}" 
                            class="w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
-                </div>
-                <button type="submit"
-                   class="whitespace-nowrap bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold text-white transition-colors">
-                    Search
-                </button>
-                <a href="{% url 'create-instrument' %}"
-                   class="whitespace-nowrap bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold text-white transition-colors">
-                    + Add Instrument
-                </a>
+                    </div>
+                    <button type="submit"
+                       class="whitespace-nowrap bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg font-semibold text-white transition-colors">
+                        Search
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-
+  
     <!-- List of Instruments -->
     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
         {% for instrument in instruments %}

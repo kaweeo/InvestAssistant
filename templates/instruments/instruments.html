@@ -6,24 +6,43 @@
 
 {% block content %}
     <div class="container mx-auto my-10">
-        <h1 class="text-3xl font-bold text-center text-green-700 mb-8">Available Instruments <a
-                href="{% url 'create-instrument' %}" class="flex items-center hover:text-green-300">
-            <!-- Plus Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Add Instrument
-        </a>
+        <h1 class="text-2xl font-bold text-center text-green-700 mb-6 flex justify-between items-center">
+            Available Instruments
+            <a href="{% url 'create-instrument' %}"
+               class="whitespace-nowrap bg-green-500 hover:bg-green-600 px-2 py-1 text-sm rounded font-semibold text-white transition-colors">
+                + Add Instrument
+            </a>
         </h1>
 
+        <!-- Search Section -->
+        <form method="GET" action="{% url 'instruments' %}" class="flex justify-center gap-4 mb-6">
+            <input type="text" 
+                   name="q" 
+                   placeholder="Search instruments..." 
+                   value="{{ query }}" 
+                   class="w-full max-w-md px-4 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <button type="submit"
+               class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-semibold text-white transition-colors">
+                Search
+            </button>
+        </form>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Search Query Result Info -->
+        {% if query %}
+            <p class="text-gray-500 mb-4 text-center">
+                Showing results for: 
+                <span class="font-semibold text-green-700">{{ query }}</span>
+            </p>
+        {% endif %}
+
+        <!-- Instruments Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {% for instrument in instruments %}
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-green-700">{{ instrument.name }}</h2>
-                    <p class="mt-2 text-gray-700">Symbol: {{ instrument.ticker }}</p>
-                    <a href="{% url 'details-instrument' instrument.pk %}" class="mt-4 inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                <div class="bg-white rounded shadow-md p-3 border border-gray-200 hover:scale-105 transition-transform">
+                    <h2 class="text-sm font-semibold text-green-700">{{ instrument.name }}</h2>
+                    <p class="mt-1 text-xs text-gray-700">Symbol: {{ instrument.ticker }}</p>
+                    <a href="{% url 'details-instrument' instrument.pk %}" 
+                       class="mt-2 inline-block bg-green-500 text-white text-xs py-1 px-3 rounded hover:bg-green-600">
                         View Details
                     </a>
                 </div>
@@ -34,59 +53,82 @@
 
         <!-- Pagination -->
         {% if is_paginated %}
-            <div class="mt-8 flex justify-center">
-            <span class="mx-1">
+            <div class="mt-6 flex justify-center space-x-2">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1" class="px-3 py-2 bg-green-700 text-white rounded hover:bg-green-600">First</a>
+                    <a href="?page=1" class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" 
+                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Previous</a>
                 {% endif %}
-            </span>
-                <span class="mx-1">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}"
-                       class="px-3 py-2 bg-green-700 text-white rounded hover:bg-green-600">Previous</a>
-                {% endif %}
-            </span>
-                <span class="mx-1">
-                <span class="px-3 py-2 bg-gray-300 text-gray-700 rounded">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-            </span>
-                <span class="mx-1">
+
+                <span class="px-2 py-1 bg-gray-300 text-gray-700 text-sm rounded">
+                    {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}"
-                       class="px-3 py-2 bg-green-700 text-white rounded hover:bg-green-600">Next</a>
+                    <a href="?page={{ page_obj.next_page_number }}" 
+                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" 
+                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Last</a>
                 {% endif %}
-            </span>
-                <span class="mx-1">
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.paginator.num_pages }}"
-                       class="px-3 py-2 bg-green-700 text-white rounded hover:bg-green-600">Last</a>
-                {% endif %}
-            </span>
             </div>
         {% endif %}
-
     </div>
 {% endblock %}
 
 
-{#{% extends "partials/base.html" %}#}
-{##}
-{#{% block title %}Instruments{% endblock %}#}
-{##}
+
 {#{% block content %}#}
-{#<div class="container mx-auto p-4">#}
-{#    <h1 class="text-3xl font-bold mb-6">Available Instruments</h1>#}
-{#    #}
-{#    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">#}
-{#        {% for instrument in instruments%}#}
-{#        <div class="bg-white p-6 rounded-lg shadow-md">#}
-{#            <h2 class="text-xl font-semibold">{{ instrument.name }}</h2>#}
-{#            <p class="text-gray-700">Ticker: {{ instrument.ticker }}</p>#}
-{#            <p class="text-gray-700">Current Price: {{ instrument.price }} USD</p>#}
-{#            <a href="#" class="mt-4 inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">#}
-{#                View Details#}
+{#    <div class="container mx-auto my-10">#}
+{#        <h1 class="text-2xl font-bold text-center text-green-700 mb-6 flex justify-between items-center">#}
+{#            Available Instruments#}
+{#            <a href="{% url 'create-instrument' %}"#}
+{#               class="whitespace-nowrap bg-green-500 hover:bg-green-600 px-2 py-1 text-sm rounded font-semibold text-white transition-colors">#}
+{#                + Add Instrument#}
 {#            </a>#}
+{#        </h1>#}
+{#        #}
+{#        {% if query %}#}
+{#            <p class="text-gray-500 mb-4">#}
+{#                Showing results for: #}
+{#                <span class="font-semibold text-green-700">{{ query }}</span>#}
+{#            </p>#}
+{#        {% endif %}#}
+{#    #}
+{#        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">#}
+{#            {% for instrument in instruments %}#}
+{#                <div class="bg-white rounded shadow-md p-3 border border-gray-200 hover:scale-105 transition-transform">#}
+{#                    <h2 class="text-sm font-semibold text-green-700">{{ instrument.name }}</h2>#}
+{#                    <p class="mt-1 text-xs text-gray-700">Symbol: {{ instrument.ticker }}</p>#}
+{#                    <a href="{% url 'details-instrument' instrument.pk %}" #}
+{#                       class="mt-2 inline-block bg-green-500 text-white text-xs py-1 px-3 rounded hover:bg-green-600">#}
+{#                        View Details#}
+{#                    </a>#}
+{#                </div>#}
+{#            {% empty %}#}
+{#                <p class="text-center text-gray-500 col-span-full">No instruments available at the moment.</p>#}
+{#            {% endfor %}#}
 {#        </div>#}
-{#        {% endfor %}#}
+{##}
+{#        <!-- Pagination -->#}
+{#        {% if is_paginated %}#}
+{#            <div class="mt-6 flex justify-center space-x-2">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <a href="?page=1" class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">First</a>#}
+{#                    <a href="?page={{ page_obj.previous_page_number }}" #}
+{#                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Previous</a>#}
+{#                {% endif %}#}
+{##}
+{#                <span class="px-2 py-1 bg-gray-300 text-gray-700 text-sm rounded">#}
+{#                    {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}#}
+{#                </span>#}
+{##}
+{#                {% if page_obj.has_next %}#}
+{#                    <a href="?page={{ page_obj.next_page_number }}" #}
+{#                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Next</a>#}
+{#                    <a href="?page={{ page_obj.paginator.num_pages }}" #}
+{#                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Last</a>#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        {% endif %}#}
 {#    </div>#}
-{#</div>#}
 {#{% endblock %}#}

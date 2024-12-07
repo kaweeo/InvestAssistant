@@ -8,5 +8,4 @@ urlpatterns = [
     path('accounts/', include('InvestAssistant.accounts.urls')),
     path('transactions/', include('InvestAssistant.transactions.urls')),
     path('instruments/', include('InvestAssistant.instruments.urls')),
-    # path('investments/', include('investments.urls')),
 ]

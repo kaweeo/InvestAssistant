@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -7,11 +8,26 @@ from InvestAssistant.instruments.models import Instrument
 from InvestAssistant.mixins import ReadOnlyMixin
 
 
-class InstrumentListView(ListView):
+class InstrumentsListView(ListView):
     model = Instrument
-    template_name = 'main/../../templates/instruments/instruments.html'
-    paginate_by = 12
+    template_name = 'instruments/instruments.html'
     context_object_name = 'instruments'
+    paginate_by = 12
+
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        query = self.request.GET.get('q')  # Get the search query
+
+        if query:
+            query_set = query_set.filter(
+                Q(name__icontains=query) | Q(ticker__icontains=query)
+            )
+        return query_set
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')  # Add the query to the context
+        return context
 
 
 class CreateInstrumentView(CreateView):
