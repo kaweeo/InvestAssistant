@@ -48,114 +48,19 @@
                 </a>
             </li>
         </ul>
-
+        
         <!-- Logout Button -->
         <div>
-            <a href="#" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center">
-                <!-- Logout Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Logout
-            </a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center">
+                    <!-- Logout Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                </button>
+            </form>
         </div>
     </div>
 </nav>
-
-{#{% load static %}#}
-{#<nav class="bg-green-700 text-white shadow-lg">#}
-{#    <div class="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">#}
-{#        <!-- Logo Section -->#}
-{#        <div class="flex items-center">#}
-{#            <a href="{% url 'home' %}" class="flex items-center">#}
-{#                <img src="{% static 'images/ia2_circle.png' %}" alt="InvestAssistant Logo" class="h-10 w-10">#}
-{#                <span class="ml-3 text-lg font-bold hover:text-green-300">InvestAssistant</span>#}
-{#            </a>#}
-{#        </div>#}
-{##}
-{#        <!-- Navbar Links -->#}
-{#        <ul class="hidden md:flex space-x-8">#}
-{#            <li>#}
-{#                <a href="{% url 'instruments' %}" class="flex items-center hover:text-green-300">#}
-{#                    <img src="{% static 'icons/instruments-icon.svg' %}" alt="Instruments Icon" class="h-6 w-6 mr-2">#}
-{#                    Instruments#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="{% static 'icons/portfolio-icon.svg' %}" alt="Portfolio Icon" class="h-6 w-6 mr-2">#}
-{#                    Portfolio#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="{% static 'icons/transactions-icon.svg' %}" alt="Transactions Icon" class="h-6 w-6 mr-2">#}
-{#                    Transactions#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="{% static 'icons/profile-icon.svg' %}" alt="Profile Icon" class="h-6 w-6 mr-2">#}
-{#                    Profile#}
-{#                </a>#}
-{#            </li>#}
-{#        </ul>#}
-{##}
-{#        <!-- Logout Button -->#}
-{#        <div>#}
-{#            <a href="#" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center">#}
-{#                <img src="{% static 'icons/logout-icon.svg' %}" alt="Logout Icon" class="h-6 w-6 mr-2">#}
-{#                Logout#}
-{#            </a>#}
-{#        </div>#}
-{#    </div>#}
-{#</nav>#}
-
-
-
-
-
-
-{#{% load static %}#}
-{#<nav class="bg-green-700 text-white">#}
-{#    <div class="container mx-auto flex items-center justify-between py-4">#}
-{#        <div class="flex items-center">#}
-{#            <img src="{% static 'images/ia2_circle.png' %}" alt="'icons/logo.svg'" class="h-10">#}
-{#            <span class="ml-3 text-lg font-bold">InvestAssistant</span>#}
-{#        </div>#}
-{##}
-{#        <ul class="flex space-x-8">#}
-{#            <li>#}
-{#                <a href="{% url 'home' %}" class="flex items-center hover:text-green-300">#}
-{#                    <img src="#" alt="icons/instruments-icon.svg" class="h-6 w-6 mr-2">#}
-{#                    Instruments#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="#" alt="icons/portfolio-icon.svg" class="h-6 w-6 mr-2">#}
-{#                    Portfolio#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="#" alt="icons/transactions-icon.svg" class="h-6 w-6 mr-2">#}
-{#                    Transactions#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#" class="flex items-center hover:text-green-300">#}
-{#                    <img src="#" alt="icons/profile-icon.svg" class="h-6 w-6 mr-2">#}
-{#                    Profile#}
-{#                </a>#}
-{#            </li>#}
-{#        </ul>#}
-{##}
-{#        <div>#}
-{#            <a href="#" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center">#}
-{#                <img src="#" alt="icons/logout-icon.svg" class="h-6 w-6 mr-2">#}
-{#                Logout#}
-{#            </a>#}
-{#        </div>#}
-{#    </div>#}
-{#</nav>#}
