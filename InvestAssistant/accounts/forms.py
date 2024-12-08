@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from InvestAssistant.accounts.models import Profile, AppUser
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -64,34 +64,35 @@ class ProfileEditForm(forms.ModelForm):
             ),
         }
 
-# class AppUserChangePassword(PasswordChangeForm):
-#     old_password = forms.CharField(
-#         label='',
-#         widget=forms.PasswordInput(
-#             attrs={
-#                 "autocomplete": "current-password",
-#                 'placeholder': 'Enter your old password',
-#                 'style': "height: 55px",
-#             }
-#         ),
-#     )
-#     new_password1 = forms.CharField(
-#         label='',
-#         widget=forms.PasswordInput(attrs={
-#             "autocomplete": "new-password",
-#             'placeholder': 'Enter your new password',
-#             'style': "height: 55px",
-#         }
-#         ),
-#         help_text=password_validation.password_validators_help_text_html(),
-#     )
-#     new_password2 = forms.CharField(
-#         label='',
-#         widget=forms.PasswordInput(
-#             attrs={
-#                 "autocomplete": "new-password",
-#                 'placeholder': 'New password confirmation',
-#                 'style': "height: 55px",
-#             }
-#         ),
-#     )
+
+class AppUserChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label='',
+        widget=forms.PasswordInput(
+            attrs={
+                "autocomplete": "current-password",
+                'placeholder': 'Enter your old password',
+                'style': "height: 55px",
+            }
+        ),
+    )
+    new_password1 = forms.CharField(
+        label='',
+        widget=forms.PasswordInput(attrs={
+            "autocomplete": "new-password",
+            'placeholder': 'Enter your new password',
+            'style': "height: 55px",
+        }
+        ),
+
+    )
+    new_password2 = forms.CharField(
+        label='',
+        widget=forms.PasswordInput(
+            attrs={
+                "autocomplete": "new-password",
+                'placeholder': 'New password confirmation',
+                'style': "height: 55px",
+            }
+        ),
+    )

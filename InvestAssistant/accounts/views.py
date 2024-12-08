@@ -1,16 +1,15 @@
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
-
-from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthenticationForm, ProfileEditForm
+from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthenticationForm, ProfileEditForm, \
+    AppUserChangePasswordForm
 from InvestAssistant.accounts.models import Profile
 
-UserModel = get_user_model()
 
+UserModel = get_user_model()
 
 class AppUserRegisterView(CreateView):
     model = UserModel
@@ -70,5 +69,21 @@ class ProfileEditView(UpdateView):
         return response
 
 
-class ProfileDeleteView(DeleteView):  # TODO LoginRequiredMixin
-    pass
+class AppUserChangePasswordView(PasswordChangeView):
+    model = UserModel
+    form_class = AppUserChangePasswordForm
+    template_name = 'accounts/password-change.html'
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'home')  # TODO: profile details return reverse_lazy('', kwargs={'pk': self.request.user.pk})
+
+
+class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Profile
+    template_name = 'accounts/profile-delete.html'
+    success_url = reverse_lazy('login')
+
+    def test_func(self):
+        profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
+        return self.request.user == profile.user
