@@ -4,8 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
-from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthenticationForm, ProfileEditForm, \
-    AppUserChangePasswordForm
+from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthenticationForm, ProfileEditForm
 from InvestAssistant.accounts.models import Profile
 
 UserModel = get_user_model()

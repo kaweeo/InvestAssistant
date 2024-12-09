@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('total_quantity', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('avg_price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('instrument', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='investments', to='instruments.instrument')),
-                ('profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='investments', to='accounts.profile')),
+                ('instrument', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='NOT_using', to='instruments.instrument')),
+                ('profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='NOT_using', to='accounts.profile')),
             ],
         ),
     ]

@@ -58,4 +58,3 @@ class InstrumentDeleteView(DeleteView):
     # form_class = DeleteInstrumentForm
     template_name = 'instruments/delete-instrument.html'
     success_url = reverse_lazy('instruments')
-

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-
+from django.contrib.admin import ModelAdmin
 from InvestAssistant.accounts.models import Profile, AppUser
 
 admin.site.site_header = "InvestAssistant Admin"
@@ -18,14 +17,18 @@ class ProfileAdmin(ModelAdmin):
     model = Profile
 
     list_filter = ('balance', )
-    list_display = ('pk', 'user_id', 'user', 'phone_number', 'balance', )
+    list_display = ('pk', 'user', 'phone_number', 'balance', )
+    list_editable = ('balance', 'phone_number', )
     search_fields = ('user__email', 'first_name', 'phone_number', )
-    ordering = ('balance', 'user_id')
+    ordering = ('balance', 'user')
     list_per_page = 10
 
-    fieldsets = (
-            (None, {'fields': ('user', 'password')}),
-            ('Personal info', {'fields': ()}),
-            ('Permissions', {'fields': ('is_active', 'is_staff', 'groups', 'user_permissions')}),
-            ('Important dates', {'fields': ('last_login',)})
-)
+    fieldsets = [
+        ('Profile Information', {
+            'fields': [
+                'user',
+                'phone_number',
+                'balance',
+            ],
+        }),
+    ]
