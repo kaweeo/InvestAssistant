@@ -64,35 +64,3 @@ class ProfileEditForm(forms.ModelForm):
             ),
         }
 
-
-class AppUserChangePasswordForm(PasswordChangeForm):
-    old_password = forms.CharField(
-        label='',
-        widget=forms.PasswordInput(
-            attrs={
-                "autocomplete": "current-password",
-                'placeholder': 'Enter your old password',
-                'style': "height: 55px",
-            }
-        ),
-    )
-    new_password1 = forms.CharField(
-        label='',
-        widget=forms.PasswordInput(attrs={
-            "autocomplete": "new-password",
-            'placeholder': 'Enter your new password',
-            'style': "height: 55px",
-        }
-        ),
-
-    )
-    new_password2 = forms.CharField(
-        label='',
-        widget=forms.PasswordInput(
-            attrs={
-                "autocomplete": "new-password",
-                'placeholder': 'New password confirmation',
-                'style': "height: 55px",
-            }
-        ),
-    )

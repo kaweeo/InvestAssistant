@@ -11,6 +11,5 @@ urlpatterns = [
         path('', ProfileDetailView.as_view(), name='profile-details'),
         path('edit/', ProfileEditView.as_view(), name='profile-edit'),
         path('delete/', ProfileDeleteView.as_view(), name='profile-delete'),
-        path('password-change', PasswordChangeView.as_view(), name='password-change'),
     ]))
 ]

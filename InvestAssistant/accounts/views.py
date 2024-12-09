@@ -8,8 +8,8 @@ from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthen
     AppUserChangePasswordForm
 from InvestAssistant.accounts.models import Profile
 
-
 UserModel = get_user_model()
+
 
 class AppUserRegisterView(CreateView):
     model = UserModel
@@ -67,16 +67,6 @@ class ProfileEditView(UpdateView):
         response = super().form_valid(form)
 
         return response
-
-
-class AppUserChangePasswordView(PasswordChangeView):
-    model = UserModel
-    form_class = AppUserChangePasswordForm
-    template_name = 'accounts/password-change.html'
-
-    def get_success_url(self):
-        return reverse_lazy(
-            'home')  # TODO: profile details return reverse_lazy('', kwargs={'pk': self.request.user.pk})
 
 
 class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
