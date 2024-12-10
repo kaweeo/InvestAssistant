@@ -15,7 +15,6 @@ class CreateInstrumentForm(PlaceholderMixin, BaseInstrumentForm):
 
 
 class EditInstrumentForm(PlaceholderMixin, BaseInstrumentForm):
-    # BaseInstrumentForm.Meta.exclude = ('ticker',)
     pass
 
 

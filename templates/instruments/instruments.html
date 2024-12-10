@@ -9,20 +9,20 @@
         <h1 class="text-xl font-bold text-center text-green-600 mb-6 flex justify-between items-center">
             Available Instruments
             <a href="{% url 'create-instrument' %}"
-                class="whitespace-nowrap bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 px-4 py-2 text-lg rounded-lg font-semibold text-white shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+               class="whitespace-nowrap bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 px-4 py-2 text-lg rounded-lg font-semibold text-white shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
                 Add Instrument
             </a>
         </h1>
 
         <!-- Search Section -->
         <form method="GET" action="{% url 'instruments' %}" class="flex justify-center gap-4 mb-6">
-            <input type="text" 
-                   name="q" 
-                   placeholder="Search instruments..." 
-                   value="{{ query }}" 
+            <input type="text"
+                   name="q"
+                   placeholder="Search instruments..."
+                   value="{{ query }}"
                    class="w-full max-w-md px-4 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500">
             <button type="submit"
-               class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-semibold text-white transition-colors">
+                    class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-semibold text-white transition-colors">
                 Search
             </button>
         </form>
@@ -30,7 +30,7 @@
         <!-- Search Query Result Info -->
         {% if query %}
             <p class="text-gray-500 mb-4 text-center">
-                Showing results for: 
+                Showing results for:
                 <span class="font-semibold text-green-700">{{ query }}</span>
             </p>
         {% endif %}
@@ -41,7 +41,7 @@
                 <div class="bg-white rounded shadow-md p-3 border border-gray-200 hover:scale-105 transition-transform">
                     <h2 class="text-sm font-semibold text-green-700">{{ instrument.name }}</h2>
                     <p class="mt-1 text-xs text-gray-700">Symbol: {{ instrument.ticker }}</p>
-                    <a href="{% url 'details-instrument' instrument.pk %}" 
+                    <a href="{% url 'details-instrument' instrument.pk %}"
                        class="mt-2 inline-block bg-green-500 text-white text-xs py-1 px-3 rounded hover:bg-green-600">
                         View Details
                     </a>
@@ -55,8 +55,9 @@
         {% if is_paginated %}
             <div class="mt-6 flex justify-center space-x-2">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1" class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">First</a>
-                    <a href="?page={{ page_obj.previous_page_number }}" 
+                    <a href="?page=1"
+                       class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}"
                        class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Previous</a>
                 {% endif %}
 
@@ -65,9 +66,9 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" 
+                    <a href="?page={{ page_obj.next_page_number }}"
                        class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}" 
+                    <a href="?page={{ page_obj.paginator.num_pages }}"
                        class="px-2 py-1 bg-green-700 text-white text-sm rounded hover:bg-green-600">Last</a>
                 {% endif %}
             </div>

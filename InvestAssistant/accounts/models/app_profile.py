@@ -73,29 +73,6 @@ class Profile(models.Model):
             return 0
         return round((self.total_unrealized_pnl / cost_basis) * 100, 2)
 
-    # @property
-    # def portfolio_value(self):
-    #     return self.investments.aggregate(
-    #         total_market_value=Sum(F('total_quantity') * F('instrument__current_price'))
-    #     )['total_market_value'] or 0
-    #
-    # @property
-    # def portfolio_cost_basis(self):
-    #     return self.investments.aggregate(
-    #         total_cost_basis=Sum(F('total_quantity') * F('avg_price'))
-    #     )['total_cost_basis'] or 0
-    #
-    # @property
-    # def total_unrealized_pnl(self):
-    #     return self.portfolio_value - self.portfolio_cost_basis
-    #
-    # @property
-    # def total_roi(self):
-    #     if self.portfolio_cost_basis == 0:
-    #         return 0
-    #
-    #     return round(self.total_unrealized_pnl / self.portfolio_cost_basis * 100, 2)
-    #
     @property
     def full_name(self):
         if self.first_name and self.last_name:

@@ -1,9 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from InvestAssistant.accounts.models import Profile, AppUser
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from InvestAssistant.accounts.models import AppUser
 
 
 class AppUserRegistrationForm(UserCreationForm):
@@ -63,4 +60,3 @@ class ProfileEditForm(forms.ModelForm):
                 attrs={'placeholder': 'Phone Number'}
             ),
         }
-

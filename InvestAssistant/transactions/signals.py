@@ -18,6 +18,7 @@ def update_profile_balance_on_investment_transaction(sender, instance, created, 
 
         instance.profile.save()
 
+#TODO implement more functionalities
 
 @receiver(pre_delete, sender=Transaction)
 def rollback_profile_balance_on_transaction_delete(sender, instance, **kwargs):

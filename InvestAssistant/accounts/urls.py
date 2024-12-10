@@ -1,4 +1,3 @@
-from django.contrib.auth.views import PasswordChangeView
 from django.urls import path, include
 from InvestAssistant.accounts.views import AppUserRegisterView, AppUserLoginView, AppUserLogoutView, ProfileDetailView, \
     ProfileEditView, ProfileDeleteView

@@ -4,61 +4,62 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto mt-10">
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Create an Account</h1>
-    
-    <form method="POST" class="bg-white shadow-md rounded-lg p-8">
-        {% csrf_token %}
-        
-        <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.email.id_for_label }}">
-                Email Address
-            </label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <p class="text-red-500 text-xs italic">{{ form.email.errors.0 }}</p>
-            {% endif %}
-            {% if form.email.help_text %}
-                <p class="text-gray-500 text-xs mt-1">{{ form.email.help_text }}</p>
-            {% endif %}
-        </div>
+    <div class="max-w-md mx-auto mt-10">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Create an Account</h1>
 
-        <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.password1.id_for_label }}">
-                Password
-            </label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <p class="text-red-500 text-xs italic">{{ form.password1.errors.0 }}</p>
-            {% endif %}
-            <ul class="text-gray-500 text-xs mt-1">
-                <li>Must be at least 8 characters long</li>
-                <li>Cannot be entirely numeric</li>
-                <li>Cannot be too similar to your personal information</li>
-                <li>Cannot be a commonly used password</li>
-            </ul>
-        </div>
+        <form method="POST" class="bg-white shadow-md rounded-lg p-8">
+            {% csrf_token %}
 
-        <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.password2.id_for_label }}">
-                Confirm Password
-            </label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <p class="text-red-500 text-xs italic">{{ form.password2.errors.0 }}</p>
-            {% endif %}
-        </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.email.id_for_label }}">
+                    Email Address
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.email.errors.0 }}</p>
+                {% endif %}
+                {% if form.email.help_text %}
+                    <p class="text-gray-500 text-xs mt-1">{{ form.email.help_text }}</p>
+                {% endif %}
+            </div>
 
-        <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 transition duration-200">
-            Create Account
-        </button>
-    </form>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.password1.id_for_label }}">
+                    Password
+                </label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+                <ul class="text-gray-500 text-xs mt-1">
+                    <li>Must be at least 8 characters long</li>
+                    <li>Cannot be entirely numeric</li>
+                    <li>Cannot be too similar to your personal information</li>
+                    <li>Cannot be a commonly used password</li>
+                </ul>
+            </div>
 
-    <p class="mt-6 text-center text-gray-600">
-        Already have an account? 
-        <a href="{% url 'login' %}" class="text-green-500 hover:text-green-600 font-semibold">
-            Log in
-        </a>
-    </p>
-</div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.password2.id_for_label }}">
+                    Confirm Password
+                </label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 transition duration-200">
+                Create Account
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-gray-600">
+            Already have an account?
+            <a href="{% url 'login' %}" class="text-green-500 hover:text-green-600 font-semibold">
+                Log in
+            </a>
+        </p>
+    </div>
 {% endblock %}

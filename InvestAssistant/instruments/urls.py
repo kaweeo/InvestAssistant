@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from InvestAssistant.instruments import views
 from InvestAssistant.instruments.views import InstrumentsListView
 

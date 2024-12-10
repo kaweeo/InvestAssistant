@@ -3,9 +3,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from InvestAssistant.instruments.forms import CreateInstrumentForm, DeleteInstrumentForm, EditInstrumentForm
+from InvestAssistant.instruments.forms import CreateInstrumentForm, EditInstrumentForm
 from InvestAssistant.instruments.models import Instrument
-from InvestAssistant.mixins import ReadOnlyMixin
 
 
 class InstrumentsListView(ListView):
@@ -55,6 +54,5 @@ class InstrumentEditView(UpdateView):
 
 class InstrumentDeleteView(DeleteView):
     model = Instrument
-    # form_class = DeleteInstrumentForm
     template_name = 'instruments/delete-instrument.html'
     success_url = reverse_lazy('instruments')
