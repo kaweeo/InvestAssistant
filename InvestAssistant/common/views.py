@@ -60,6 +60,57 @@ def create_investment(request):
     return render(request, 'common/investment.html', {'form': form})
 
 
+
+@login_required
+def sell_investment(request):
+    form = CreateTransactionForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        instrument = form.cleaned_data['instrument']
+        quantity = form.cleaned_data['quantity']
+
+        # Fetch the user's investment
+        investment = Investment.objects.filter(
+            profile=request.user.profile,
+            instrument=instrument
+        ).first()
+
+        if not investment:
+            form.add_error(None, "You do not own this investment.")
+        elif quantity > investment.total_quantity:
+            form.add_error(None, f"You only own {investment.total_quantity} units of {instrument.name}.")
+        else:
+            # Save the transaction
+            form.instance.profile = request.user.profile
+            form.instance.transaction_side = Transaction.SELL
+            form.save()
+
+            # Update the investment
+            investment.total_quantity -= quantity
+            if investment.total_quantity == 0:
+                investment.delete()
+            else:
+                investment.save()
+
+            return redirect('portfolio')
+
+    return render(request, 'common/sell-investment.html', {'form': form})
+#
+# @login_required
+# def sell_investment(request):
+#     form = CreateTransactionForm(request.POST or None)
+#
+#     if request.method == 'POST' and form.is_valid():
+#         # Automatically associate the transaction with the current user and mark as SELL
+#         form.instance.profile = request.user.profile
+#         form.instance.transaction_side = Transaction.SELL
+#         form.save()
+#
+#         # Redirect to the portfolio view after saving
+#         return redirect('portfolio')
+#
+#     return render(request, 'common/sell-investment.html', {'form': form})
+
 class Portfolio(ListView):
     model = Investment
     template_name = 'common/portfolio.html'
@@ -67,8 +118,7 @@ class Portfolio(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        # Filter investments for the current user's profile
-        return Investment.objects.filter(profile=self.request.user.profile)
+        return Investment.objects.filter(profile=self.request.user.profile).order_by('instrument__name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

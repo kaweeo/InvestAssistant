@@ -48,6 +48,7 @@ def update_investment(sender, instance, created, **kwargs):
         else:
             investment.save()
 
+
 class Investment(models.Model):
     profile = models.ForeignKey(
         to=Profile,
