@@ -9,4 +9,5 @@ urlpatterns = [
     path('transactions/', include('InvestAssistant.transactions.urls')),
     path('instruments/', include('InvestAssistant.instruments.urls')),
     path('investments/', include('InvestAssistant.common.urls')),
+    path('transactions/', include('InvestAssistant.transactions.urls')),
 ]

@@ -1,10 +1,7 @@
+from django.db import models
 from django.core.exceptions import ValidationError
 from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
-from django.db import models
-from InvestAssistant.accounts.models import Profile
-from InvestAssistant.instruments.models import Instrument
-
 
 class Transaction(models.Model):
     BUY = 'BUY'
@@ -153,4 +150,4 @@ class CashTransaction(models.Model):
         if self.transaction_flow == self.WITHDRAWAL and self.profile.balance < self.amount:
             raise ValidationError("Insufficient balance for withdrawal.")
 
-# TODO: save() with atomic transactions
+# TODO: add functionality for tracking cash transactions and profits
