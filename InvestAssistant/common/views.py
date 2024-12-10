@@ -40,19 +40,6 @@ class HomePage(ListView):
         return context
 
 
-# class CreateInvestmentView(CreateView):
-#     form_class = CreateTransactionForm
-#     template_name = 'common/investment.html'
-#     success_url = reverse_lazy('home-dashboard')
-#
-#     def form_valid(self, form):
-#         investment = form.save(commit=False)
-#         investment.profile = self.request.user.profile
-#         investment.save()
-#         return super().form_valid(form)
-
-
-
 @login_required
 def create_investment(request):
     if request.method == 'POST':
@@ -61,13 +48,53 @@ def create_investment(request):
             try:
                 # Save transaction with the logged-in user's profile
                 investment = form.save(commit=False)
-                investment.profile = request.user.profile  # Link the profile
-                investment.save()  # Save to the database
-                return redirect('/')  # Redirect after success
+                investment.profile = request.user.profile
+                investment.save()
+                return redirect('/')
 
             except Exception as e:
-                form.add_error(None, f"Error saving investment: {str(e)}")  # Catch and show errors
+                form.add_error(None, f"Error saving investment: {str(e)}")
     else:
         form = CreateTransactionForm()
 
     return render(request, 'common/investment.html', {'form': form})
+
+
+class Portfolio(ListView):
+    model = Investment
+    template_name = 'common/portfolio.html'
+    context_object_name = 'investments'
+    paginate_by = 6
+
+    def get_queryset(self):
+        # Filter investments for the current user's profile
+        return Investment.objects.filter(profile=self.request.user.profile)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        investments = context['investments']
+
+        # Calculate portfolio total
+        context['portfolio_total'] = sum(
+            investment.calculate_market_value() for investment in investments
+        )
+
+        # Calculate total unrealized PNL
+        total_unrealized_pnl = sum(
+            investment.calculate_unrealized_pnl() for investment in investments
+        )
+        context['total_unrealized_pnl'] = total_unrealized_pnl
+
+        # Calculate total cost basis
+        total_cost_basis = sum(
+            investment.calculate_cost_basis() for investment in investments
+        )
+        context['total_cost_basis'] = total_cost_basis
+
+        # Calculate total ROI
+        if total_cost_basis != 0:
+            context['total_roi'] = round((total_unrealized_pnl / total_cost_basis) * 100, 2)
+        else:
+            context['total_roi'] = 0
+
+        return context
