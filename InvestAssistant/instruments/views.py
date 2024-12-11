@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -29,20 +30,20 @@ class InstrumentsListView(ListView):
         return context
 
 
-class CreateInstrumentView(CreateView):
+class CreateInstrumentView(LoginRequiredMixin, CreateView):
     model = Instrument
     form_class = CreateInstrumentForm
     template_name = 'instruments/create-instrument.html'
     success_url = reverse_lazy('instruments')
 
 
-class InstrumentDetailView(DetailView):
+class InstrumentDetailView(LoginRequiredMixin, DetailView):
     model = Instrument
     template_name = 'instruments/details-instrument.html'
     context_object_name = 'instrument'
 
 
-class InstrumentEditView(UpdateView):
+class InstrumentEditView(LoginRequiredMixin, UpdateView):
     model = Instrument
     form_class = EditInstrumentForm
     template_name = 'instruments/edit-instrument.html'
@@ -52,7 +53,7 @@ class InstrumentEditView(UpdateView):
         return reverse_lazy('details-instrument', kwargs={'pk': self.object.pk})
 
 
-class InstrumentDeleteView(DeleteView):
+class InstrumentDeleteView(LoginRequiredMixin, DeleteView):
     model = Instrument
     template_name = 'instruments/delete-instrument.html'
     success_url = reverse_lazy('instruments')

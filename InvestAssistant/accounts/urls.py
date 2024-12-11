@@ -2,6 +2,7 @@ from django.urls import path, include
 from InvestAssistant.accounts.views import AppUserRegisterView, AppUserLoginView, AppUserLogoutView, ProfileDetailView, \
     ProfileEditView, ProfileDeleteView
 
+
 urlpatterns = [
     path('register/', AppUserRegisterView.as_view(), name='register'),
     path('login/', AppUserLoginView.as_view(), name='login'),

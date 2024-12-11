@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -12,7 +13,7 @@ from InvestAssistant.transactions.models import Transaction
 class HomePage(ListView):
     model = Instrument
     success_url = reverse_lazy('')
-    template_name = 'home-dashboard.html'
+    template_name = 'common/home-dashboard.html'
     context_object_name = 'instruments'
     paginate_by = 6
 
@@ -87,7 +88,7 @@ def sell_investment(request):
     return render(request, 'common/sell-investment.html', {'form': form})
 
 
-class Portfolio(ListView):
+class Portfolio(LoginRequiredMixin, ListView):
     model = Investment
     template_name = 'common/portfolio.html'
     context_object_name = 'investments'

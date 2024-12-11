@@ -1,5 +1,29 @@
 # InvestAssistant
 
+InvestAssistant is a financial tracking platform that allows users to manage their investments in various instruments
+like stocks and bonds. Users can create profiles, perform buy and sell transactions, and track their portfolio, which
+includes holdings, transaction history, and unrealized profits or losses. The platform also manages cash deposits and
+withdrawals, ensuring users have accurate balances for trading. InvestAssistant provides a complete solution for
+investment management and financial tracking.
+
+## Set up
+
+1. Clone this repository
+   `git clone https://github.com/kaweeo/InvestAssistant`
+2. Open the project
+3. Create venv
+   `python -m venv venv`
+4. Install dependencies
+   `pip install -r requirements.txt`
+5. Set up the database
+6. Run the migrations
+
+python manage.py migrate
+
+7.Run the project
+
+python manage.py runserver
+
 ## Database Schema
 
 Profile/User └──> has many Transactions └──> has many Investments
@@ -49,3 +73,12 @@ CashTransaction └──> belongs to one Profile
 
 By effectively managing these entities, the system ensures accurate tracking of user investments, provides valuable
 insights into portfolio performance, and facilitates smooth execution of buy and sell transactions.
+
+### 5. Portfolio
+
+* CashTransactions handle the movement of funds in and out of a user’s account.
+
+* Deposit: When a user deposits funds, a CashTransaction of type "Deposit" is created. This increases the Profile
+  balance.
+* Withdrawal: When a user withdraws funds, a CashTransaction of type "Withdrawal" is created. This decreases the Profile
+  balance.

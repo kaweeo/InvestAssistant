@@ -18,7 +18,6 @@ def update_profile_balance_on_investment_transaction(sender, instance, created, 
 
         instance.profile.save()
 
-#TODO implement more functionalities
 
 @receiver(pre_delete, sender=Transaction)
 def rollback_profile_balance_on_transaction_delete(sender, instance, **kwargs):
@@ -33,7 +32,7 @@ def rollback_profile_balance_on_transaction_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=CashTransaction)
 def update_profile_balance_on_cash_transaction(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.profile:
         if instance.transaction_flow == CashTransaction.DEPOSIT:
             instance.profile.balance += instance.amount
         elif instance.transaction_flow == CashTransaction.WITHDRAWAL:

@@ -78,9 +78,3 @@ class CashTransaction(models.Model):
     timestamp = models.DateTimeField(
         auto_now_add=True,
     )
-
-    def clean(self):
-        if self.transaction_flow == self.WITHDRAWAL and self.profile.balance < self.amount:
-            raise ValidationError("Insufficient balance for withdrawal.")
-
-# TODO: add functionality for tracking cash transactions and profits

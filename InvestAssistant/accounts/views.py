@@ -31,11 +31,11 @@ class AppUserLoginView(LoginView):
         return reverse_lazy('home')
 
 
-class AppUserLogoutView(LogoutView):
+class AppUserLogoutView(LoginRequiredMixin, LogoutView):
     template_name = 'accounts/logout.html'
 
 
-class ProfileDetailView(DetailView):  # LoginRequiredMixin
+class ProfileDetailView(LoginRequiredMixin, DetailView):  #
     model = UserModel
     template_name = 'accounts/profile-details.html'
     context_object_name = 'profile'
@@ -51,7 +51,7 @@ class ProfileDetailView(DetailView):  # LoginRequiredMixin
         return context
 
 
-class ProfileEditView(UpdateView):
+class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileEditForm
     template_name = 'accounts/profile-edit.html'
