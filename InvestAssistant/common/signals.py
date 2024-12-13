@@ -9,6 +9,8 @@ def update_investment(sender, instance, created, **kwargs):
     if not created:  # Only handle new transactions
         return
 
+    print(f"Signal triggered for transaction: {instance}")
+
     profile = instance.profile
     instrument = instance.instrument
     quantity = instance.quantity

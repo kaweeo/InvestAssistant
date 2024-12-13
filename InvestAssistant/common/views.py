@@ -1,3 +1,5 @@
+from xxlimited_35 import error
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -45,6 +47,7 @@ def create_investment(request):
                 investment = form.save(commit=False)
                 investment.profile = request.user.profile
                 investment.save()
+
                 return redirect('portfolio')
 
             except Exception as e:
@@ -95,7 +98,10 @@ class Portfolio(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Investment.objects.filter(profile=self.request.user.profile).order_by('instrument__name')
+        print(self.request.user.profile)  # Debugging line to check the profile
+        queryset = Investment.objects.filter(profile=self.request.user.profile).order_by('instrument__name')
+        print(queryset)  # Debugging line
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -13,6 +13,7 @@ def update_profile_balance_on_investment_transaction(sender, instance, created, 
                 instance.profile.balance -= transaction_value
             else:
                 raise ValueError("Insufficient funds for this transaction.")
+
         elif instance.transaction_side == Transaction.SELL:
             instance.profile.balance += transaction_value
 
