@@ -5,7 +5,7 @@ from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
 from InvestAssistant.transactions.models import Transaction
 
-class Investment(models.Model):
+class   Investment(models.Model):
     profile = models.ForeignKey(
         to=Profile,
         on_delete=models.CASCADE,

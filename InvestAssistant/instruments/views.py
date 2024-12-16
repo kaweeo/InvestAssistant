@@ -1,6 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
@@ -8,7 +8,7 @@ from InvestAssistant.instruments.forms import CreateInstrumentForm, EditInstrume
 from InvestAssistant.instruments.models import Instrument
 
 
-class InstrumentsListView(ListView):
+class InstrumentsListView(ListView, LoginRequiredMixin):
     model = Instrument
     template_name = 'instruments/instruments.html'
     context_object_name = 'instruments'
@@ -26,7 +26,7 @@ class InstrumentsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['query'] = self.request.GET.get('q', '')  # Add the query to the context
+        context['query'] = self.request.GET.get('q', '')
         return context
 
 
@@ -34,7 +34,9 @@ class CreateInstrumentView(LoginRequiredMixin, CreateView):
     model = Instrument
     form_class = CreateInstrumentForm
     template_name = 'instruments/create-instrument.html'
-    success_url = reverse_lazy('instruments')
+
+    def get_success_url(self):
+        return reverse_lazy('details-instrument', kwargs={'pk': self.object.pk})
 
 
 class InstrumentDetailView(LoginRequiredMixin, DetailView):
@@ -49,11 +51,21 @@ class InstrumentEditView(LoginRequiredMixin, UpdateView):
     template_name = 'instruments/edit-instrument.html'
     context_object_name = 'instrument'
 
+    def test_func(self):
+        return self.request.user.is_authenticated
+
     def get_success_url(self):
         return reverse_lazy('details-instrument', kwargs={'pk': self.object.pk})
 
 
-class InstrumentDeleteView(LoginRequiredMixin, DeleteView):
+class InstrumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Instrument
     template_name = 'instruments/delete-instrument.html'
     success_url = reverse_lazy('instruments')
+
+    def test_func(self):
+        return self.request.user.is_authenticated
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Instrument deleted successfully.")
+        return super().delete(request, *args, **kwargs)

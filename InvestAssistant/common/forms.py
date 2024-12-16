@@ -9,3 +9,4 @@ class CreateTransactionForm(forms.ModelForm):
         model = Transaction
         fields = ['instrument', 'transaction_side', 'quantity', 'price_per_unit', ]
         profile = forms.ModelChoiceField(queryset=Profile.objects.all(), widget=forms.HiddenInput())
+

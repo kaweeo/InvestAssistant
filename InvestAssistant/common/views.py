@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -56,6 +57,37 @@ def create_investment(request):
     return render(request, 'common/investment.html', {'form': form})
 
 
+# @login_required
+# def sell_investment(request):
+#     form = CreateTransactionForm(request.POST or None)
+#
+#     if request.method == 'POST' and form.is_valid():
+#         instrument = form.cleaned_data['instrument']
+#         quantity = form.cleaned_data['quantity']
+#
+#         investment = Investment.objects.filter(
+#             profile=request.user.profile,
+#             instrument=instrument,
+#         ).first()
+#
+#         if not investment:
+#             form.add_error(None, "You do not own this investment.")
+#         elif quantity > investment.total_quantity:
+#             form.add_error(None, f"You only own {investment.total_quantity} units of {instrument.name}.")
+#         else:
+#             form.instance.profile = request.user.profile
+#             form.instance.transaction_side = Transaction.SELL
+#             form.save()
+#
+#             investment.total_quantity -= quantity
+#             if investment.total_quantity == 0:
+#                 investment.delete()
+#             else:
+#                 investment.save()
+#
+#             return redirect('portfolio')
+#
+#     return render(request, 'common/sell-investment.html', {'form': form})
 @login_required
 def sell_investment(request):
     form = CreateTransactionForm(request.POST or None)
@@ -64,27 +96,32 @@ def sell_investment(request):
         instrument = form.cleaned_data['instrument']
         quantity = form.cleaned_data['quantity']
 
-        investment = Investment.objects.filter(
-            profile=request.user.profile,
-            instrument=instrument,
-        ).first()
+        try:
+            with transaction.atomic():  # Wrap in atomic block
+                investment = Investment.objects.filter(
+                    profile=request.user.profile,
+                    instrument=instrument,
+                ).first()
 
-        if not investment:
-            form.add_error(None, "You do not own this investment.")
-        elif quantity > investment.total_quantity:
-            form.add_error(None, f"You only own {investment.total_quantity} units of {instrument.name}.")
-        else:
-            form.instance.profile = request.user.profile
-            form.instance.transaction_side = Transaction.SELL
-            form.save()
+                if not investment:
+                    form.add_error(None, "You do not own this investment.")
+                elif quantity > investment.total_quantity:
+                    form.add_error(None, f"You only own {investment.total_quantity} units of {instrument.name}.")
+                else:
+                    form.instance.profile = request.user.profile
+                    form.instance.transaction_side = Transaction.SELL
+                    form.save()
 
-            investment.total_quantity -= quantity
-            if investment.total_quantity == 0:
-                investment.delete()
-            else:
-                investment.save()
+                    investment.total_quantity -= quantity
+                    if investment.total_quantity == 0:
+                        investment.delete()
+                    else:
+                        investment.save()
 
-            return redirect('portfolio')
+                return redirect('portfolio')
+
+        except Exception as e:
+            form.add_error(None, f"Error processing the transaction: {str(e)}")
 
     return render(request, 'common/sell-investment.html', {'form': form})
 
@@ -96,10 +133,10 @@ class Portfolio(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        print(self.request.user.profile)  # Debugging line to check the profile
-        queryset = Investment.objects.filter(profile=self.request.user.profile).order_by('instrument__name')
-        print(queryset)  # Debugging line
-        return queryset
+        return Investment.objects.filter(
+            profile=self.request.user.profile) \
+            .select_related('instrument') \
+            .order_by('-total_quantity')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
