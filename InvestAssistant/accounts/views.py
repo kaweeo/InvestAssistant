@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -63,9 +64,12 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return Profile.objects.get(user__pk=self.kwargs['pk'])
 
     def form_valid(self, form):
-        response = super().form_valid(form)
+        messages.success(self.request, "Profile updated successfully!")
+        return super().form_valid(form)
 
-        return response
+    def form_invalid(self, form):
+        messages.error(self.request, "There were errors in your form. Please correct them.")
+        return super().form_invalid(form)
 
 
 class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

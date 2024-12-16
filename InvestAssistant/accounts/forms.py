@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from InvestAssistant.accounts.models import Profile, AppUser
+from InvestAssistant.accounts.validators import BasicPhoneNumberValidator
 
 
 class AppUserRegistrationForm(UserCreationForm):
@@ -50,13 +51,11 @@ class ProfileEditForm(forms.ModelForm):
         model = Profile
         fields = ['first_name', 'last_name', 'phone_number']
         widgets = {
-            'first_name': forms.TextInput(
-                attrs={'placeholder': 'First Name'}
-            ),
-            'last_name': forms.TextInput(
-                attrs={'placeholder': 'Last Name'}
-            ),
-            'phone_number': forms.TextInput(
-                attrs={'placeholder': 'Phone Number'}
-            ),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Phone Number'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['phone_number'].validators.append(BasicPhoneNumberValidator())
