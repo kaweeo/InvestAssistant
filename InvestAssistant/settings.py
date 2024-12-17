@@ -39,15 +39,17 @@ MY_APPS = [
 ]
 
 INSTALLED_APPS = [
+     # 3rd party
+     "unfold",
+     'widget_tweaks',
+     # Django native
      'django.contrib.admin',
      'django.contrib.auth',
      'django.contrib.contenttypes',
      'django.contrib.sessions',
      'django.contrib.messages',
      'django.contrib.staticfiles',
-     # 3rd party
-     # "unfold",
-     'widget_tweaks',
+
  ] + MY_APPS
 
 MIDDLEWARE = [
