@@ -17,10 +17,8 @@ investment management and financial tracking.
    `pip install -r requirements.txt`
 5. Set up the database
 6. Run the migrations
-
-python manage.py migrate
-
-7.Run the project
+   `python manage.py migrate`
+7. Run the project
 
 python manage.py runserver
 
