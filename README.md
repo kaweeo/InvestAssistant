@@ -78,3 +78,12 @@ insights into portfolio performance, and facilitates smooth execution of buy and
   balance.
 * Withdrawal: When a user withdraws funds, a CashTransaction of type "Withdrawal" is created. This decreases the Profile
   balance.
+  
+###
+![create-user](https://github.com/kaweeo/InvestAssistant/blob/main/description/not-logged-in.png)
+
+###
+![portfolio](https://github.com/kaweeo/InvestAssistant/blob/main/description/portfolio.png)
+
+###
+![transaction](https://github.com/kaweeo/InvestAssistant/blob/main/description/transactions.png)
