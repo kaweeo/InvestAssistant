@@ -41,8 +41,7 @@ CashTransaction └──> belongs to one Profile
 ### 1. User and Profile
 
 * A **User** creates a **Profile** that holds additional details like name, phone number, and balance.
-* The **Profile** is the central entity, linked to many other entities like **Transactions**, **Investments**, and *
-  *CashTransactions**.
+* The **Profile** is the central entity, linked to many other entities like **Transactions**, **Investments**, and **CashTransactions**.
 
 ### 2. Transactions (Buy/Sell)
 
@@ -72,10 +71,9 @@ CashTransaction └──> belongs to one Profile
 By effectively managing these entities, the system ensures accurate tracking of user investments, provides valuable
 insights into portfolio performance, and facilitates smooth execution of buy and sell transactions.
 
-### 5. Portfolio
+### 5. CashTransactions
 
 * CashTransactions handle the movement of funds in and out of a user’s account.
-
 * Deposit: When a user deposits funds, a CashTransaction of type "Deposit" is created. This increases the Profile
   balance.
 * Withdrawal: When a user withdraws funds, a CashTransaction of type "Withdrawal" is created. This decreases the Profile
