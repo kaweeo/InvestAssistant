@@ -6,9 +6,8 @@ from InvestAssistant.instruments.models import Instrument
 from InvestAssistant.transactions.models import Transaction
 from functools import cached_property
 
-class   Investment(models.Model):
 
-
+class Investment(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
@@ -20,7 +19,6 @@ class   Investment(models.Model):
                 name='investment_price_non_negative'
             ),
         ]
-
 
     profile = models.ForeignKey(
         to=Profile,
@@ -55,7 +53,9 @@ class   Investment(models.Model):
     def calculate_cost_basis(self):
         return round(self.total_quantity * self.avg_price, 2)
 
-    @cached_property
+    # @cached_property
+    # Keep @cached_property if calculate_market_value is accessed multiple times per request and instrument.current_price is stable during a request cycle.
+    # Switch to @property if current_price changes frequently or cache staleness is a concern, as it ensures fresh calculations:
     def calculate_market_value(self):
         return round(self.total_quantity * self.instrument.current_price, 2)
 
@@ -70,5 +70,4 @@ class   Investment(models.Model):
 
     def __str__(self):
         return f"{self.profile.full_name} owns {self.total_quantity} of {self.instrument.name}"
-
-    
+ 

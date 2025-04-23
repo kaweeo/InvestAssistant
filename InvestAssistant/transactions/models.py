@@ -78,3 +78,6 @@ class CashTransaction(models.Model):
     timestamp = models.DateTimeField(
         auto_now_add=True,
     )
+
+    def __str__(self):
+        return f"{self.timestamp}: {self.transaction_flow} ${self.amount} by {self.profile.full_name}"

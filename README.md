@@ -1,89 +1,114 @@
 # InvestAssistant
 
-InvestAssistant is a financial tracking platform that allows users to manage their investments in various instruments
-like stocks and bonds. Users can create profiles, perform buy and sell transactions, and track their portfolio, which
-includes holdings, transaction history, and unrealized profits or losses. The platform also manages cash deposits and
-withdrawals, ensuring users have accurate balances for trading. InvestAssistant provides a complete solution for
-investment management and financial tracking.
+InvestAssistant is a Django-based financial tracking platform built on the Model-View-Template (MVT) architecture. It enables users to manage investments across various instruments like stocks, ETFs, and cryptocurrencies. The application provides comprehensive portfolio management with features for tracking holdings, transaction history, and unrealized profits or losses.
 
-## Set up
+## Features
+
+- **User Management**: Create profiles and manage account information
+- **Investment Tracking**: Monitor holdings across multiple investment instruments
+- **Transaction Management**: Record buy/sell transactions with automatic portfolio updates
+- **Cash Management**: Track deposits and withdrawals with accurate balance calculations
+- **Portfolio Analytics**: View cost basis, market value, and return on investment metrics
+
+## Technology Stack
+
+- **Framework**: Django (MVT architecture)
+- **Database**: SQLite (development) / PostgreSQL (production-ready)
+- **Frontend**: Django Templates with Bootstrap
+- **Authentication**: Django's built-in authentication system
+
+## Setup
 
 1. Clone this repository
-   `git clone https://github.com/kaweeo/InvestAssistant`
-2. Open the project
-3. Create venv
-   `python -m venv venv`
-4. Install dependencies
-   `pip install -r requirements.txt`
-5. Set up the database
-6. Run the migrations
-   `python manage.py migrate`
-7. Run the project
+   ```
+   git clone https://github.com/kaweeo/InvestAssistant
+   ```
 
-python manage.py runserver
+2. Create and activate virtual environment
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-## Database Schema
+3. Install dependencies
+   ```
+   pip install -r requirements.txt
+   ```
 
-Profile/User └──> has many Transactions └──> has many Investments
+4. Run migrations
+   ```
+   python manage.py migrate
+   ```
 
-Instrument └──> has many Transactions └──> has many Investments
+5. Start the development server
+   ```
+   python manage.py runserver
+   ```
 
-Transaction └──> belongs to one Profile └──> belongs to one Instrument
+6. Access the application at http://127.0.0.1:8000/
 
-Investment └──> belongs to one Profile └──> belongs to one Instrument
+## Architecture
 
-CashTransaction └──> belongs to one Profile
+### Model-View-Template (MVT) Pattern
 
----
+InvestAssistant follows Django's MVT architectural pattern:
 
-## How It Works Together
+- **Models**: Define data structure and business logic
+- **Views**: Process user requests and return responses
+- **Templates**: Render data in HTML format for the client
+
+### Database Schema
+
+- **Profile/User** → has many Transactions → has many Investments
+- **Instrument** → has many Transactions → has many Investments
+- **Transaction** → belongs to one Profile → belongs to one Instrument
+- **Investment** → belongs to one Profile → belongs to one Instrument
+- **CashTransaction** → belongs to one Profile
+
+## System Components
 
 ### 1. User and Profile
 
-* A **User** creates a **Profile** that holds additional details like name, phone number, and balance.
-* The **Profile** is the central entity, linked to many other entities like **Transactions**, **Investments**, and **CashTransactions**.
+- A **User** creates a **Profile** with personal details and account balance
+- The **Profile** serves as the central entity linked to transactions and investments
 
 ### 2. Transactions (Buy/Sell)
 
-* When a user buys or sells an instrument, a **Transaction** is created.
-    * **Buy Transaction:**
-        - The user's **Profile** balance is reduced by the total transaction value (quantity * price per unit).
-        - An **Investment** record is created or updated to track the user's holdings in the instrument.
-    * **Sell Transaction:**
-        - The user's **Profile** balance is increased by the transaction value.
-        - The **Investment** record is updated to reflect the reduced quantity.
+- **Buy Transaction**:
+  - Reduces the user's balance by the transaction value
+  - Creates or updates an Investment record
+- **Sell Transaction**:
+  - Increases the user's balance by the transaction value
+  - Updates the Investment record to reflect reduced holdings
 
 ### 3. Investment
 
-* An **Investment** record represents the user's holdings in a specific instrument.
-* It tracks the **total_quantity** of the instrument owned and the **avg_price** at which the instrument was acquired.
-* Each **Investment** is associated with a **Profile**.
-* The **Investment** is updated with each buy or sell transaction to maintain accurate information about the user's
-  holdings.
+- Represents a user's holdings in a specific instrument
+- Tracks total quantity and average acquisition price
+- Provides methods for calculating current value and performance metrics
 
 ### 4. Portfolio
 
-* The **Portfolio** provides a consolidated view of a user's investments.
-* It aggregates all **Transactions** and **Investments** to calculate the current holdings.
-* For each instrument, it calculates the net position, average acquisition price, and unrealized profit/loss.
-* The portfolio is updated dynamically as new transactions occur.
+- Consolidates all investments for a comprehensive view
+- Calculates performance metrics including:
+  - Total market value
+  - Cost basis
+  - Unrealized profit/loss
+  - Return on investment
 
-By effectively managing these entities, the system ensures accurate tracking of user investments, provides valuable
-insights into portfolio performance, and facilitates smooth execution of buy and sell transactions.
+### 5. Cash Transactions
 
-### 5. CashTransactions
+- Manages deposits and withdrawals
+- Updates the user's balance accordingly
+- Maintains a history of all cash movements
 
-* CashTransactions handle the movement of funds in and out of a user’s account.
-* Deposit: When a user deposits funds, a CashTransaction of type "Deposit" is created. This increases the Profile
-  balance.
-* Withdrawal: When a user withdraws funds, a CashTransaction of type "Withdrawal" is created. This decreases the Profile
-  balance.
-  
-###
+## Screenshots
+
+### User Registration
 ![create-user](https://github.com/kaweeo/InvestAssistant/blob/main/description/not-logged-in.png)
 
-###
+### Portfolio Overview
 ![portfolio](https://github.com/kaweeo/InvestAssistant/blob/main/description/portfolio.png)
 
-###
+### Transaction History
 ![transaction](https://github.com/kaweeo/InvestAssistant/blob/main/description/transactions.png)
