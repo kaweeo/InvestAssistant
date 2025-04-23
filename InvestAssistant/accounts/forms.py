@@ -5,6 +5,10 @@ from InvestAssistant.accounts.validators import BasicPhoneNumberValidator
 
 
 class AppUserRegistrationForm(UserCreationForm):
+    class Meta:
+        model = AppUser
+        fields = ('email', 'password1', 'password2')
+
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent',
@@ -25,10 +29,6 @@ class AppUserRegistrationForm(UserCreationForm):
             'placeholder': 'Confirm your password'
         })
     )
-
-    class Meta:
-        model = AppUser
-        fields = ('email', 'password1', 'password2')
 
 
 class CustomAuthenticationForm(AuthenticationForm):

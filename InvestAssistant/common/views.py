@@ -9,6 +9,8 @@ from InvestAssistant.common.forms import CreateTransactionForm
 from InvestAssistant.common.models import Investment
 from InvestAssistant.instruments.models import Instrument
 from InvestAssistant.transactions.models import Transaction
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 
 class HomePage(ListView):
@@ -135,7 +137,7 @@ class Portfolio(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Investment.objects.filter(
             profile=self.request.user.profile) \
-            .select_related('instrument') \
+            .select_related('instrument', 'profile') \
             .order_by('-total_quantity')
 
     def get_context_data(self, **kwargs):
@@ -162,3 +164,4 @@ class Portfolio(LoginRequiredMixin, ListView):
             context['total_roi'] = 0
 
         return context
+

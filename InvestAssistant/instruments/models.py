@@ -6,6 +6,10 @@ class Instrument(models.Model):
         ordering = ['name']
         verbose_name = 'Instrument'
         verbose_name_plural = 'Instruments'
+        indexes = [
+            models.Index(fields=['ticker']),
+            models.Index(fields=['type']),
+        ]
 
     TYPE_CHOICES = [  # Can use shortnames for DB optimization on production
         ("SECURITY", "Security"),
