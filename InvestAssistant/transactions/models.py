@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
+from django.conf import settings
 
 
 class Transaction(models.Model):
@@ -80,4 +81,4 @@ class CashTransaction(models.Model):
     )
 
     def __str__(self):
-        return f"{self.timestamp}: {self.transaction_flow} ${self.amount} by {self.profile.full_name}"
+        return f"{self.timestamp}: {self.transaction_flow} {settings.DEFAULT_CURRENCY}{self.amount} by {self.profile.full_name}"
