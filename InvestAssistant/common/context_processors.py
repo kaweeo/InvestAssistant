@@ -9,3 +9,5 @@ def currency_processor(request):
     return {
         'DEFAULT_CURRENCY': settings.DEFAULT_CURRENCY,
     } 
+
+
