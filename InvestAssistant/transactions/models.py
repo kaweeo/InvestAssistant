@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
 from django.conf import settings
-
+from django.core.validators import MinValueValidator
 
 class Transaction(models.Model):
     BUY = 'BUY'
@@ -31,10 +31,16 @@ class Transaction(models.Model):
     quantity = models.DecimalField(
         max_digits=14,
         decimal_places=4,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
     price_per_unit = models.DecimalField(
         max_digits=14,
         decimal_places=4,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
     timestamp = models.DateTimeField(
         auto_now_add=True,
@@ -73,7 +79,10 @@ class CashTransaction(models.Model):
 
     amount = models.DecimalField(
         max_digits=11,
-        decimal_places=2
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
 
     timestamp = models.DateTimeField(

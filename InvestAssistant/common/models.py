@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
-from InvestAssistant.transactions.models import Transaction
 from functools import cached_property
 
 
