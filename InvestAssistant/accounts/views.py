@@ -2,11 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from InvestAssistant.accounts.forms import AppUserRegistrationForm, CustomAuthenticationForm, ProfileEditForm
-from InvestAssistant.accounts.models import Profile
+from InvestAssistant.accounts.models import Profile, AppUser
 
 UserModel = get_user_model()
 
@@ -36,15 +37,21 @@ class AppUserLogoutView(LoginRequiredMixin, LogoutView):
     template_name = 'accounts/logout.html'
 
 
-class ProfileDetailView(LoginRequiredMixin, DetailView):  #
-    model = UserModel
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = AppUser
     template_name = 'accounts/profile-details.html'
     context_object_name = 'profile'
 
+    def get_object(self, queryset=None):
+        user = get_object_or_404(AppUser, pk=self.kwargs['pk'])
+        if user != self.request.user:
+            raise PermissionDenied("You are not authorized to view this profile.")
+
+        return user
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.get_object()  # Get the UserModel instance
-        # Explicitly fetch the profile to ensure it's accessible
+        user = self.get_object()
         profile = get_object_or_404(Profile, user=user)
         context['user'] = user
         context['profile'] = profile
@@ -61,7 +68,11 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('profile-details', kwargs={'pk': self.object.user.pk})
 
     def get_object(self, queryset=None):
-        return Profile.objects.get(user__pk=self.kwargs['pk'])
+        profile = get_object_or_404(Profile, user__pk=self.kwargs['pk'])
+        if profile.user != self.request.user:
+            raise PermissionDenied("You are not authorized to edit this profile.")
+
+        return profile
 
     def form_valid(self, form):
         messages.success(self.request, "Profile updated successfully!")
@@ -80,3 +91,5 @@ class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
         return self.request.user == profile.user
+
+# Might rework to use User-Based URLs - removing pk from urls
