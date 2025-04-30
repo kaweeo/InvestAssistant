@@ -15,12 +15,12 @@ class Transaction(models.Model):
     ]
 
     profile = models.ForeignKey(
-        Profile,
+        to=Profile,
         on_delete=models.CASCADE,
         related_name='transactions',
     )
     instrument = models.ForeignKey(
-        Instrument,
+        to=Instrument,
         on_delete=models.CASCADE,
         related_name='transactions',
     )
@@ -47,8 +47,10 @@ class Transaction(models.Model):
     )
 
     def clean(self):
+        if self.quantity is None:
+            raise ValidationError({"quantity": "Transaction quantity is required."})
         if self.quantity <= 0:
-            raise ValidationError("Transaction quantity must be greater than zero.")
+            raise ValidationError({"quantity": "Transaction quantity must be greater than zero."})
 
     def calculate_transaction_value(self):
         return self.quantity * self.price_per_unit

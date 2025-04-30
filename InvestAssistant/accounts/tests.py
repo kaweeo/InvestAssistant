@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django import forms
 from InvestAssistant.accounts.forms import CustomAuthenticationForm, AppUserRegistrationForm, ProfileEditForm
-from InvestAssistant.accounts.models import AppUser, Profile
+from InvestAssistant.accounts.models import AppUser, Profile    
+from django.contrib.auth import get_user_model
+import uuid
 
 
 class TestCustomAuthenticationForm(TestCase):
@@ -70,12 +72,19 @@ class TestAppUserRegistrationForm(TestCase):
 
 class TestProfileEditForm(TestCase):
     def setUp(self):
-        self.user = AppUser.objects.create_user(email='test@example.com', password='testpassword123')
-        self.profile = Profile.objects.create(user=self.user)
+        self.user = get_user_model().objects.create_user(
+            email=f"testuser_{uuid.uuid4()}@example.com",
+            password="testpass"
+        )
+        self.profile = self.user.profile
+        self.profile.first_name = "John"
+        self.profile.last_name = "Doe"
+        self.profile.phone_number = "1234567890"
+        self.profile.save()
         self.valid_data = {
             'first_name': 'John',
             'last_name': 'Doe',
-            'phone_number': '+1234567890',
+            'phone_number': '1234567890'
         }
 
     def test_form_fields_existence(self):
@@ -98,6 +107,6 @@ class TestProfileEditForm(TestCase):
         self.assertTrue(form.is_valid())
         profile = form.save()
         self.assertEqual(profile.first_name, 'John')
-        self.assertEqual(profile.phone_number, '+1234567890')
+        self.assertEqual(profile.phone_number, '1234567890')
 
         

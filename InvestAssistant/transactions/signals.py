@@ -2,6 +2,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from InvestAssistant.transactions.models import CashTransaction, Transaction
 import logging
+from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -39,24 +40,26 @@ def rollback_profile_balance_on_transaction_delete(sender, instance, **kwargs):
 def update_profile_balance_on_cash_transaction(sender, instance, created, **kwargs):
     try:
         if created and instance.profile:
+            amount = Decimal(str(instance.amount))  # Convert to Decimal
             if instance.transaction_flow == CashTransaction.DEPOSIT:
-                instance.profile.balance += instance.amount
+                instance.profile.balance += amount
             elif instance.transaction_flow == CashTransaction.WITHDRAWAL:
-                if instance.profile.balance >= instance.amount:
-                    instance.profile.balance -= instance.amount
-                else:
-                    raise ValueError("Insufficient funds for withdrawal.")
-
+                if instance.profile.balance < amount:
+                    raise ValueError("Insufficient funds for withdrawal")
+                instance.profile.balance -= amount
+                
             instance.profile.save()
+
     except Exception as e:
         logger.error(f"Error processing cash transaction: {e}")
-
+        raise
 
 @receiver(pre_delete, sender=CashTransaction)
 def rollback_profile_balance_on_cash_transaction_delete(sender, instance, **kwargs):
+    amount = Decimal(str(instance.amount))  # Convert to Decimal
     if instance.transaction_flow == CashTransaction.DEPOSIT:
-        instance.profile.balance -= instance.amount
+        instance.profile.balance -= amount
     elif instance.transaction_flow == CashTransaction.WITHDRAWAL:
-        instance.profile.balance += instance.amount
+        instance.profile.balance += amount
 
     instance.profile.save()

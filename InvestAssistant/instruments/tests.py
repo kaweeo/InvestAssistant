@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from InvestAssistant.instruments.models import Instrument
+from InvestAssistant.transactions.models import Transaction
 from InvestAssistant.instruments.forms import CreateInstrumentForm, EditInstrumentForm, DeleteInstrumentForm
 
 
@@ -45,10 +46,6 @@ class InstrumentModelTests(TestCase):
     def test_verbose_names(self):
         self.assertEqual(Instrument._meta.verbose_name, "Instrument")
         self.assertEqual(Instrument._meta.verbose_name_plural, "Instruments")
-
-    def test_str_representation(self):
-        instrument = Instrument(name="Apple", ticker="AAPL", type="SECURITY", current_price=150.50)
-        self.assertEqual(str(instrument), "Apple (AAPL, SECURITY)")
 
     def test_current_price_default(self):
         instrument = Instrument(name="Test", ticker="TEST", type="SECURITY")

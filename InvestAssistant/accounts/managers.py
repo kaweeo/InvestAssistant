@@ -12,7 +12,7 @@ class AppUserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)  # internally calls make_password(), handles more edge cases
         user.save(using=self._db)
-
+        
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):

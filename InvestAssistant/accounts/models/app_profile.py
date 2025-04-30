@@ -23,27 +23,29 @@ class Profile(models.Model):
 
     first_name = models.CharField(
         max_length=MAX_NAME_LENGTH,
-        validators=(
+        validators=[
             MinLengthValidator(MIN_NAME_LENGTH),
             NameValidator,
-        ),
+        ],
         null=True,
         blank=True,
     )
 
     last_name = models.CharField(
         max_length=MAX_NAME_LENGTH,
-        validators=(
+        validators=[
             MinLengthValidator(MIN_NAME_LENGTH),
             NameValidator,
-        ),
+        ],
         null=True,
         blank=True,
     )
 
     phone_number = models.CharField(
         max_length=MAX_PHONE_LENGTH,
-        validators=(BasicPhoneNumberValidator,),
+        validators=[
+            BasicPhoneNumberValidator,
+            ],
         null=True,
         blank=True,
     )
