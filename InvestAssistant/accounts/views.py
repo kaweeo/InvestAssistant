@@ -85,12 +85,18 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
 
 class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Profile
+    model = UserModel
     template_name = 'accounts/profile-delete.html'
     success_url = reverse_lazy('login')
 
-    def test_func(self):
+    def get_object(self, queryset=None):
         profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
-        return self.request.user == profile.user
+        if profile.user != self.request.user:
+            raise PermissionDenied("You are not authorized to delete this profile.")
 
-# Might rework to use User-Based URLs - removing pk from urls
+        return profile.user
+
+    def test_func(self):
+        user = self.get_object()
+        return self.request.user == user
+
