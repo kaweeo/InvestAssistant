@@ -1,9 +1,12 @@
-from django.test import TestCase
-from django import forms
+from decimal import Decimal
+from django.test import TestCase, Client
+from django.urls import reverse
 from InvestAssistant.accounts.forms import CustomAuthenticationForm, AppUserRegistrationForm, ProfileEditForm
 from InvestAssistant.accounts.models import AppUser, Profile    
 from django.contrib.auth import get_user_model
 import uuid
+
+UserModel = get_user_model()
 
 
 class TestCustomAuthenticationForm(TestCase):
@@ -109,4 +112,118 @@ class TestProfileEditForm(TestCase):
         self.assertEqual(profile.first_name, 'John')
         self.assertEqual(profile.phone_number, '1234567890')
 
-        
+
+class ProfileViewsTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()  # Use django.test.Client
+        self.user = UserModel.objects.create_user(
+            email=f"testuser_{uuid.uuid4()}@example.com",
+            password="testpass"
+        )
+        self.profile = self.user.profile
+        self.profile.first_name = "John"
+        self.profile.last_name = "Doe"
+        self.profile.phone_number = "1234567890"
+        self.profile.balance = Decimal("10000.00")
+        self.profile.save()
+        self.other_user = UserModel.objects.create_user(
+            email=f"other_{uuid.uuid4()}@example.com",
+            password="testpass"
+        )
+
+    def test_profile_detail_view_authenticated_authorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-details', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'], self.user)
+        self.assertTemplateUsed(response, 'accounts/profile-details.html')
+
+    def test_profile_detail_view_authenticated_unauthorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-details', kwargs={'pk': self.other_user.pk}))
+        self.assertEqual(response.status_code, 403)  # PermissionDenied
+
+    def test_profile_detail_view_unauthenticated(self):
+        response = self.client.get(reverse('profile-details', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response,
+                             f"{reverse('login')}?next={reverse('profile-details', kwargs={'pk': self.user.pk})}")
+
+    def test_profile_edit_view_get_authenticated_authorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-edit', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['object'], self.profile)
+        self.assertIsInstance(response.context['form'], ProfileEditForm)
+        self.assertTemplateUsed(response, 'accounts/profile-edit.html')
+
+    def test_profile_edit_view_get_authenticated_unauthorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-edit', kwargs={'pk': self.other_user.pk}))
+        self.assertEqual(response.status_code, 403)  # PermissionDenied
+
+    def test_profile_edit_view_post_valid(self):
+        self.client.login(email=self.user.email, password="testpass")
+        data = {
+            'first_name': 'Jane',
+            'last_name': 'Smith',
+            'phone_number': '0987654321'
+        }
+        response = self.client.post(reverse('profile-edit', kwargs={'pk': self.user.pk}), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('profile-details', kwargs={'pk': self.user.pk}))
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.first_name, 'Jane')
+        self.assertEqual(self.profile.last_name, 'Smith')
+        self.assertEqual(self.profile.phone_number, '0987654321')
+
+    def test_profile_edit_view_post_invalid(self):
+        self.client.login(email=self.user.email, password="testpass")
+        data = {
+            'first_name': 'J',  # Too short
+            'last_name': 'Smith',
+            'phone_number': 'invalid'
+        }
+        response = self.client.post(reverse('profile-edit', kwargs={'pk': self.user.pk}), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['form'].is_valid())
+        self.assertIn('first_name', response.context['form'].errors)
+        self.assertIn('phone_number', response.context['form'].errors)
+        self.assertTemplateUsed(response, 'accounts/profile-edit.html')
+
+    def test_profile_edit_view_unauthenticated(self):
+        response = self.client.get(reverse('profile-edit', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response,
+                             f"{reverse('login')}?next={reverse('profile-edit', kwargs={'pk': self.user.pk})}")
+
+    def test_profile_delete_view_get_authenticated_authorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-delete', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['object'], self.profile)
+        self.assertTemplateUsed(response, 'accounts/profile-delete.html')
+
+    def test_profile_delete_view_get_authenticated_unauthorized(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.get(reverse('profile-delete', kwargs={'pk': self.other_user.pk}))
+        self.assertEqual(response.status_code, 403)  # PermissionDenied
+
+    def test_profile_delete_view_post(self):
+        self.client.login(email=self.user.email, password="testpass")
+        response = self.client.post(reverse('profile-delete', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('login'))
+        self.assertFalse(Profile.objects.filter(user=self.user).exists())
+        self.assertFalse(UserModel.objects.filter(pk=self.user.pk).exists())
+
+    def test_profile_delete_view_unauthenticated(self):
+        response = self.client.get(reverse('profile-delete', kwargs={'pk': self.user.pk}))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response,
+                             f"{reverse('login')}?next={reverse('profile-delete', kwargs={'pk': self.user.pk})}")
+
+
+
+
