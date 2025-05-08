@@ -202,7 +202,7 @@ class ProfileViewsTests(TestCase):
         self.client.login(email=self.user.email, password="testpass")
         response = self.client.get(reverse('profile-delete', kwargs={'pk': self.user.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['object'], self.profile)
+        self.assertEqual(response.context['object'], self.user)
         self.assertTemplateUsed(response, 'accounts/profile-delete.html')
 
     def test_profile_delete_view_get_authenticated_unauthorized(self):
