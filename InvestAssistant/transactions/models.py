@@ -2,7 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from InvestAssistant.accounts.models import Profile
 from InvestAssistant.instruments.models import Instrument
-
+from django.conf import settings
+from django.core.validators import MinValueValidator
 
 class Transaction(models.Model):
     BUY = 'BUY'
@@ -14,12 +15,12 @@ class Transaction(models.Model):
     ]
 
     profile = models.ForeignKey(
-        Profile,
+        to=Profile,
         on_delete=models.CASCADE,
         related_name='transactions',
     )
     instrument = models.ForeignKey(
-        Instrument,
+        to=Instrument,
         on_delete=models.CASCADE,
         related_name='transactions',
     )
@@ -30,18 +31,26 @@ class Transaction(models.Model):
     quantity = models.DecimalField(
         max_digits=14,
         decimal_places=4,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
     price_per_unit = models.DecimalField(
         max_digits=14,
         decimal_places=4,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
     timestamp = models.DateTimeField(
         auto_now_add=True,
     )
 
     def clean(self):
+        if self.quantity is None:
+            raise ValidationError({"quantity": "Transaction quantity is required."})
         if self.quantity <= 0:
-            raise ValidationError("Transaction quantity must be greater than zero.")
+            raise ValidationError({"quantity": "Transaction quantity must be greater than zero."})
 
     def calculate_transaction_value(self):
         return self.quantity * self.price_per_unit
@@ -72,9 +81,15 @@ class CashTransaction(models.Model):
 
     amount = models.DecimalField(
         max_digits=11,
-        decimal_places=2
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
 
     timestamp = models.DateTimeField(
         auto_now_add=True,
     )
+
+    def __str__(self):
+        return f"{self.timestamp}: {self.transaction_flow} {settings.DEFAULT_CURRENCY}{self.amount} by {self.profile.full_name}"

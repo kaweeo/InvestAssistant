@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MinLengthValidator
 
 
 class Instrument(models.Model):
@@ -6,6 +7,10 @@ class Instrument(models.Model):
         ordering = ['name']
         verbose_name = 'Instrument'
         verbose_name_plural = 'Instruments'
+        indexes = [
+            models.Index(fields=['ticker']),
+            models.Index(fields=['type']),
+        ]
 
     TYPE_CHOICES = [  # Can use shortnames for DB optimization on production
         ("SECURITY", "Security"),
@@ -25,6 +30,9 @@ class Instrument(models.Model):
         help_text="The unique ticker symbol of the instrument.",
         blank=True,
         null=True,
+        validators=[
+            MinLengthValidator(1),
+        ],
     )
 
     current_price = models.DecimalField(
@@ -32,6 +40,9 @@ class Instrument(models.Model):
         decimal_places=4,
         help_text="The current market price per unit of the instrument.",
         default=0.0,
+        validators=[
+            MinValueValidator(0.00),
+        ],
     )
 
     type = models.CharField(

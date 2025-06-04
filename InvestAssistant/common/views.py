@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
@@ -9,6 +11,8 @@ from InvestAssistant.common.forms import CreateTransactionForm
 from InvestAssistant.common.models import Investment
 from InvestAssistant.instruments.models import Instrument
 from InvestAssistant.transactions.models import Transaction
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 
 class HomePage(ListView):
@@ -35,27 +39,36 @@ class HomePage(ListView):
 
         return context
 
-
 @login_required
 def create_investment(request):
     if request.method == 'POST':
         form = CreateTransactionForm(request.POST)
         if form.is_valid():
             try:
-                # Save transaction with the logged-in user's profile
                 investment = form.save(commit=False)
                 investment.profile = request.user.profile
-                investment.save()
+                investment.transaction_side = 'BUY'
 
-                return redirect('portfolio')
+                # Calculate transaction cost
+                quantity = form.cleaned_data['quantity']
+                price_per_unit = form.cleaned_data['price_per_unit']
+                transaction_cost = Decimal(quantity) * price_per_unit  # Ensure Decimal calculation
+                print(f"Transaction cost: {transaction_cost}, Balance: {request.user.profile.balance}")  # Debug
+
+                # Check if profile.balance is enough
+                if transaction_cost > request.user.profile.balance:
+                    form.add_error(None, f"Insufficient balance: {transaction_cost} exceeds available balance of {request.user.profile.balance}.")
+                    print("Insufficient balance error added")  # Debug
+                else:
+                    investment.save()
+                    return redirect('portfolio')
 
             except Exception as e:
                 form.add_error(None, f"Error saving investment: {str(e)}")
     else:
-        form = CreateTransactionForm()
+        form = CreateTransactionForm(initial={'profile': request.user.profile})
 
-    return render(request, 'common/investment.html', {'form': form})
-
+    return render(request, 'common/investment.html', {'form': form, 'transaction_type': 'Buy'})
 
 # @login_required
 # def sell_investment(request):
@@ -135,7 +148,7 @@ class Portfolio(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Investment.objects.filter(
             profile=self.request.user.profile) \
-            .select_related('instrument') \
+            .select_related('instrument', 'profile') \
             .order_by('-total_quantity')
 
     def get_context_data(self, **kwargs):
@@ -162,3 +175,4 @@ class Portfolio(LoginRequiredMixin, ListView):
             context['total_roi'] = 0
 
         return context
+

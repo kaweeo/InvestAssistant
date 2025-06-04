@@ -13,7 +13,13 @@ class ReadOnlyMixin:
     read_only_fields = []
 
     def make_fields_readonly(self):
-        for field_name in self.read_only_fields:
+        fields_to_make_readonly = (
+            self.fields.keys() 
+            if self.read_only_fields == '__all__' 
+            else self.read_only_fields
+        )
+        
+        for field_name in fields_to_make_readonly:
             if field_name in self.fields:
                 self.fields[field_name].widget.attrs['readonly'] = True
 

@@ -60,7 +60,7 @@
             <div class="bg-gray-50 p-6">
                 <div class="text-center">
                     <h2 class="text-lg font-medium text-gray-900">Total Balance</h2>
-                    <p class="mt-2 text-3xl font-bold text-blue-600">${{ total_balance|floatformat:2 }}</p>
+                    <p class="mt-2 text-3xl font-bold text-blue-600">{{ DEFAULT_CURRENCY }}{{ total_balance|floatformat:2 }}</p>
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right {% if transaction.transaction_flow == 'DEPOSIT' %}text-green-600{% else %}text-red-600{% endif %}">
                                     {% if transaction.transaction_flow == 'DEPOSIT' %}+{% else %}-{% endif %}
-                                    ${{ transaction.amount|floatformat:2 }}
+                                    {{ DEFAULT_CURRENCY }}{{ transaction.amount|floatformat:2 }}
                                 </td>
                             </tr>
                         {% empty %}

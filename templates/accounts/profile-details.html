@@ -35,15 +35,15 @@
                     </div>
                     <div class="relative">
                         <dt class="text-sm font-medium text-gray-500">Account Balance</dt>
-                        <dd class="mt-1 text-lg font-semibold text-gray-900">${{ profile.balance }}</dd>
+                        <dd class="mt-1 text-lg font-semibold text-gray-900">{{ DEFAULT_CURRENCY }}{{ profile.balance }}</dd>
                     </div>
                     <div class="relative">
                         <dt class="text-sm font-medium text-gray-500">Portfolio Value</dt>
-                        <dd class="mt-1 text-lg font-semibold text-gray-900">${{ profile.portfolio_value }}</dd>
+                        <dd class="mt-1 text-lg font-semibold text-gray-900">{{ DEFAULT_CURRENCY }}{{ profile.portfolio_value }}</dd>
                     </div>
                     <div class="relative">
                         <dt class="text-sm font-medium text-gray-500">ROI</dt>
-                        <dd class="mt-1 text-lg font-semibold text-gray-900">${{ profile.total_roi }}</dd>
+                        <dd class="mt-1 text-lg font-semibold text-gray-900">{{ profile.total_roi }}%</dd>
                     </div>
                 </dl>
             </div>
