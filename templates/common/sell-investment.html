@@ -21,17 +21,8 @@
             <form method="POST" class="space-y-6">
                 {% csrf_token %}
 
-                <!-- Non-Field Errors -->
-                {% if form.non_field_errors %}
-                    <div class="bg-red-100 text-red-700 border border-red-300 rounded-md p-4 mb-4">
-                        {% for error in form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
                 <!-- Form Fields -->
-                {% for field in form %}
+                {% for field in form.visible_fields %}
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium mb-2">{{ field.label }}</label>
                         {{ field|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500" }}
@@ -43,6 +34,15 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
+
+                <!-- Non-Field Errors -->
+                {% if form.non_field_errors %}
+                    <div class="bg-red-100 text-red-700 border border-red-300 rounded-md p-4 mb-4">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
                 <!-- Buttons -->
                 <div class="flex gap-4">
