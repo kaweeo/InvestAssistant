@@ -134,7 +134,9 @@ class Portfolio(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Investment.objects.filter(
-            profile=self.request.user.profile) \
+            profile=self.request.user.profile,
+            total_quantity__gt=0
+        ) \
             .select_related('instrument') \
             .order_by('-total_quantity')
 
